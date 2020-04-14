@@ -8,8 +8,8 @@
         <v-card-text>{{description}}</v-card-text>
         <v-card-actions>
           <v-spacer/>
-          <v-btn flat :to="'/course/' + id" color="blue">Details</v-btn>
-          <v-btn flat :to="'/register?courseId=' + id" color="green">Register</v-btn>
+          <v-btn text :to="'/course/' + id" color="blue">Details</v-btn>
+          <v-btn text :to="'/register?courseId=' + id" color="green">Register</v-btn>
         </v-card-actions>
       </v-layout>
     </v-container>

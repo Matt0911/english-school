@@ -1,17 +1,10 @@
 <template>
   <v-app>
-    // <div id="app">
-    //   <div id="nav">
-    //     <router-link to="/">Home</router-link> |
-    //     <router-link to="/courses">Courses</router-link> |
-    //     <router-link to="/about">About</router-link>
-    //   </div>
-    //   <router-view />
-    // </div>
     <v-app-bar
       app
       color="primary"
       dark
+      clipped-left
     >
       <div class="d-flex align-center">
         <v-img
@@ -22,44 +15,59 @@
           transition="scale-transition"
           width="40"
         />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+        <h2>English School</h2>
       </div>
-
       <v-spacer></v-spacer>
-
       <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        href=""
         target="_blank"
         text
       >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
+        <v-icon>mdi-account</v-icon>
       </v-btn>
     </v-app-bar>
 
+    <v-navigation-drawer app clipped>
+      <v-list
+        dense
+        nav
+      >
+        <v-list-item link to="/">
+          <v-list-item-icon>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Home</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link to="/courses">
+          <v-list-item-icon>
+            <v-icon>mdi-bookshelf</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Courses</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link to="/about">
+          <v-list-item-icon>
+            <v-icon>mdi-information</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>About</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
     <v-content>
-      <HelloWorld/>
+      <router-view></router-view>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
 
 export default {
   name: 'App',
-
-  components: {
-    HelloWorld,
-  },
 
   data: () => ({
     //
@@ -67,65 +75,42 @@ export default {
 };
 </script>
 
- <script>
-// import Vue from 'vue';
-// import Vuetify from 'vuetify/lib';
-// // import 'vuetify/src/styles/main.sass';
-// // import VueMaterial from 'vue-material'
-// // import 'vue-material/dist/vue-material.min.css'
-// // import 'vue-material/dist/theme/default.css'
-// Vue.use(Vuetify, {
-//   iconFont: 'md',
-// });
-// export default {
-//   name: "app"
-// }
- </script>
-
- <style lang="scss">
-// @import '../node_modules/vuetify/dist/vuetify.min';
-
-// body, html {
-//   @extend .grey;
-//   @extend .lighten-4;
-//   padding: 0;
-//   margin: 0;
-//   width: 100%;
-//   min-height: 100%; // add this rule
-// }
-
-// #app {
-//   font-family: "Avenir", Helvetica, Arial, sans-serif;
-//   -webkit-font-smoothing: antialiased;
-//   -moz-osx-font-smoothing: grayscale;
-//   text-align: center;
-//   color: #2c3e50;
+<style lang="scss">
+html {
+  overflow: auto !important;
+}
+#app {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
 
 
-//   .pageTitle {
-//     @extend .display-3;
-//     @extend .font-weight-bold;
-//     @extend .cyan--text;
-//     @extend .text--darken-1;
-//   }
 
-//   .pageContent {
-//     margin: 0 20px 10px 20px;
-//   }
+  .pageContent {
+    margin: 0 20px 10px 20px;
+  }
 
-//   .baseButton {
-//     border-radius: 5px;
-//   }
-// }
-// #nav {
-//   padding: 30px;
-//   a {
-//     font-weight: bold;
-//     color: #2c3e50;
-//     &.router-link-exact-active {
-//       color: #42b983;
-//     }
-//   }
-// }
+  .baseButton {
+    border-radius: 5px;
+  }
+}
+#nav {
+  padding: 30px;
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
+}
+.nav-item {
+  text-decoration: none;
+  text-align: left;
+}
+.v-navigation-drawer {
+  border-right: solid #eee 1px;
+}
 </style>
-
