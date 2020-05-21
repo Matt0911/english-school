@@ -96,7 +96,7 @@ html {
 
 
   .pageContent {
-    margin: 0 20px 10px 20px;
+    margin: 10px 20px 10px 20px;
   }
 
   .baseButton {
