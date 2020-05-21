@@ -2,32 +2,37 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
-      dark
+      :color="$vuetify.breakpoint.smAndDown ? 'primary' : 'white'"
+      :dark="$vuetify.breakpoint.smAndDown ? false : false"
       clipped-left
+      elevate-on-scroll
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-        <h2>English School</h2>
+      <v-btn class="menu-button" v-show="$vuetify.breakpoint.smAndDown" icon @click.stop="showMenu = !showMenu">
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
+      <v-spacer v-show="$vuetify.breakpoint.smAndDown"></v-spacer>
+      <div :class="{'d-flex': true, 'align-center': $vuetify.breakpoint.smAndDown}">
+        <router-link to="/" :class="{'title-home': true, 'white--text': $vuetify.breakpoint.smAndDown, 'display-1': true}">
+          English School
+        </router-link>
+      </div>
+      <div class="nav-button-container" v-show="$vuetify.breakpoint.mdAndUp">
+        <v-btn-toggle group>
+          <v-btn text to="/courses">Courses</v-btn>
+          <v-btn text to="/about">About</v-btn>
+        </v-btn-toggle>
       </div>
       <v-spacer></v-spacer>
       <v-btn
         href=""
         target="_blank"
-        text
+        icon
       >
         <v-icon>mdi-account</v-icon>
       </v-btn>
     </v-app-bar>
 
-    <v-navigation-drawer app clipped>
+    <v-navigation-drawer v-show="$vuetify.breakpoint.smAndDown" :app="$vuetify.breakpoint.smAndDown" clipped v-model="showMenu" top>
       <v-list
         dense
         nav
@@ -69,9 +74,11 @@
 export default {
   name: 'App',
 
-  data: () => ({
-    //
-  }),
+  data () {
+    return {
+      showMenu: true,
+    }
+  },
 };
 </script>
 
@@ -106,9 +113,18 @@ html {
     }
   }
 }
+.title-home {
+  text-decoration: none;
+}
+.v-btn.menu-button {
+  padding-left: 0;
+}
 .nav-item {
   text-decoration: none;
   text-align: left;
+}
+.nav-button-container {
+  margin-left: 4rem;
 }
 .v-navigation-drawer {
   border-right: solid #eee 1px;
