@@ -1,7 +1,7 @@
 <template>
   <v-carousel
     cycle
-    height="400"
+    height="600"
     hide-delimiter-background
     show-arrows-on-hover
   >
@@ -18,7 +18,7 @@
           align="center"
           justify="center"
         >
-          <div class="display-3">{{ slide }}</div>
+          <v-btn text class="display-3" :to="i % 2 ? '/about' : '/courses'">{{ slide }}</v-btn>
         </v-row>
       </v-sheet>
     </v-carousel-item>
@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: "CoursesCarousel",
+  name: "MainCarousel",
   data () {
     return {
       slides: ['Cool pic to show something', 'A different pic', 'Maybe something else?', 'People having fun learning', 'SMILES! :)'],
