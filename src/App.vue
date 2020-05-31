@@ -19,15 +19,12 @@
       <div class="nav-button-container" v-show="$vuetify.breakpoint.mdAndUp">
         <v-btn-toggle group>
           <v-btn text to="/courses">Courses</v-btn>
+          <v-btn text to="/register">Register</v-btn>
           <v-btn text to="/about">About</v-btn>
         </v-btn-toggle>
       </div>
       <v-spacer></v-spacer>
-      <v-btn
-        href=""
-        target="_blank"
-        icon
-      >
+      <v-btn icon to="/userProfile">
         <v-icon>mdi-account</v-icon>
       </v-btn>
     </v-app-bar>
@@ -51,6 +48,14 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Courses</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link to="/register">
+          <v-list-item-icon>
+            <v-icon>mdi-book-plus</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Register</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item link to="/about">
