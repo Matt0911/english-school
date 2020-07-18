@@ -13,7 +13,7 @@
       <v-spacer v-show="$vuetify.breakpoint.smAndDown"></v-spacer>
       <div :class="{'d-flex': true, 'align-center': $vuetify.breakpoint.smAndDown}">
         <router-link to="/" :class="{'title-home': true, 'white--text': $vuetify.breakpoint.smAndDown, 'display-1': true}">
-          English School
+          <v-img src="Title.jpg" max-width="250" max-height="64" />
         </router-link>
       </div>
       <div class="nav-button-container" v-show="$vuetify.breakpoint.mdAndUp">
@@ -129,7 +129,7 @@ html {
   text-align: left;
 }
 .nav-button-container {
-  margin-left: 4rem;
+  margin-left: 2rem;
 }
 .v-navigation-drawer {
   border-right: solid #eee 1px;

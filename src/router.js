@@ -1,11 +1,13 @@
 import Vue from "vue";
 import Router from "vue-router";
+import firebase from 'firebase';
 import Home from "./views/Home.vue";
 
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
+  mode: 'history',
   routes: [
     {
       path: "/",
@@ -34,17 +36,42 @@ export default new Router({
     {
       path: "/login",
       name: "login",
-      component: Home // TODO: create login screen
+      component: () => import("./views/Login.vue")
     },
     {
       path: "/register",
       name: "registration",
-      component: () => import("./views/Registration.vue")
+      component: () => import("./views/Registration.vue"),
+      meta: {
+        requiresAuth: true,
+      }
     },
     {
       path: "/userProfile",
       name: "userProfile",
-      component: Home
+      component: Home,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: "*",
+      redirect: '/'
     }
   ]
 });
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
+  const currentUser = firebase.auth().currentUser;
+
+  if (requiresAuth && !currentUser) {
+      next('/login');
+  } else if (requiresAuth && currentUser) {
+      next();
+  } else {
+      next();
+  }
+})
+
+export default router;
