@@ -31,10 +31,9 @@
 </template>
 
 <script>
-import firebase from 'firebase';
+import { auth, usersCollection } from '../firebaseConfig.js';
 import { validationMixin } from 'vuelidate';
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
-const fb = require('../firebaseConfig.js');
 
 export default {
   mixins: [validationMixin],
@@ -88,7 +87,6 @@ export default {
         !passwordField.containsNumber && errors.push('Password must contain a number!')
         !passwordField.containsSpecial && errors.push('Password must contain one of the following characters: #?!@$%^&*-')
       }
-      console.log(errors)
       return errors
     },
     password2Errors () {
@@ -151,7 +149,7 @@ export default {
       this.showLoginForm = !this.showLoginForm;
     },
     login() {
-      firebase.auth().signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password).then(user => {
+      auth.signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password).then(user => {
         this.$store.commit('setCurrentUser', user.user)
         this.$store.dispatch('fetchUserProfile')
         this.$router.push('/userProfile')
@@ -160,32 +158,24 @@ export default {
       })
     },
     signup() {
-      firebase.auth().createUserWithEmailAndPassword(this.signupForm.email, this.signupForm.password)
+      auth.createUserWithEmailAndPassword(this.signupForm.email, this.signupForm.password)
         .then(user => new Promise(resolve => {
           this.$store.commit('setCurrentUser', user.user);
-          resolve(user);
+          resolve(user.user);
         }))
         .then(user => {
-          fb.setUserInfo(user.user.uid, () => {
+          usersCollection.doc(user.uid).set({
+            firstName: this.signupForm.firstName,
+            lastName: this.signupForm.lastName,
+          }).then(() => {
             this.$store.dispatch('fetchUserProfile');
             this.$router.push('/userProfile');
-          });
+          })
         })
         .catch(err => {
           console.log(err)
         });
     },
-    addToDB(data, name, title) {
-      firebase.firestore().collection('other').doc(data.user.uid).set({
-        name,
-        title,
-      }).then(() => {
-        this.$store.dispatch('fetchUserProfile');
-        this.$router.push('/userProfile');
-      }).catch(err => {
-        console.log(err)
-      })
-    }
   }
 }
 </script>

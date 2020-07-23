@@ -31,14 +31,6 @@ const postsCollection = db.collection('posts');
 const commentsCollection = db.collection('comments');
 const likesCollection = db.collection('likes');
 
-const setUserInfo = (uid, callback) => {
-  usersCollection.doc('userinfo').set({
-    name: 'doy',
-  }).then(() => {
-    callback();
-  });
-}
-
 export {
     db,
     auth,
@@ -47,5 +39,4 @@ export {
     postsCollection,
     commentsCollection,
     likesCollection,
-    setUserInfo,
 };
