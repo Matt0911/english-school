@@ -24,9 +24,28 @@
         </v-btn-toggle>
       </div>
       <v-spacer></v-spacer>
-      <v-btn icon to="/userProfile">
-        <v-icon>mdi-account</v-icon>
-      </v-btn>
+      <v-menu offset-y="">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-account</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-if="$store.state.currentUser" to="/userProfile">
+            <v-list-item-title>User Profile</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-if="$store.state.currentUser" @click="signOut">
+            <v-list-item-title>Sign Out</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-if="!$store.state.currentUser" to="/login">
+            <v-list-item-title>Sign In</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
 
     <v-navigation-drawer v-show="$vuetify.breakpoint.smAndDown" :app="$vuetify.breakpoint.smAndDown" clipped v-model="showMenu" top>
@@ -75,6 +94,7 @@
 </template>
 
 <script>
+import { auth } from './firebaseConfig.js';
 
 export default {
   name: 'App',
@@ -84,6 +104,21 @@ export default {
       showMenu: true,
     }
   },
+  methods: {
+    signOut () {
+      if (auth.currentUser) {
+        auth.signOut().then(() => {
+          this.$store.commit('setCurrentUser', undefined);
+          this.$store.commit('setUserProfile', undefined);
+          console.log(this.$router.currentRoute);
+          this.$router.push(this.$router.currentRoute);
+        }).catch(function(error) {
+          console.log(error);
+          // An error happened.
+        });
+      }
+    },
+  }
 };
 </script>
 
