@@ -7,24 +7,23 @@
       clipped-left
       elevate-on-scroll
     >
-      <v-btn class="menu-button" v-show="$vuetify.breakpoint.smAndDown" icon @click.stop="showMenu = !showMenu">
+      <v-btn fixed class="menu-button" v-if="$vuetify.breakpoint.smAndDown" icon @click.stop="showMenu = !showMenu">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
-      <v-spacer v-show="$vuetify.breakpoint.smAndDown"></v-spacer>
-      <div :class="{'d-flex': true, 'align-center': $vuetify.breakpoint.smAndDown}">
+      <div :class="{'d-flex': true, 'flex-grow-1':  $vuetify.breakpoint.smAndDown, 'align-center': $vuetify.breakpoint.smAndDown, 'justify-center': true}">
         <router-link to="/" :class="{'title-home': true, 'white--text': $vuetify.breakpoint.smAndDown, 'display-1': true}">
-          <v-img src="Title.jpg" max-width="250" max-height="64" />
+          <v-img src="Title.jpg" max-width="250" :max-height="$vuetify.breakpoint.smAndDown ? '56' : '64'" />
         </router-link>
       </div>
-      <div class="nav-button-container" v-show="$vuetify.breakpoint.mdAndUp">
+      <div class="nav-button-container" v-if="$vuetify.breakpoint.mdAndUp">
         <v-btn-toggle group>
           <v-btn text to="/courses">Courses</v-btn>
           <v-btn text to="/register">Register</v-btn>
           <v-btn text to="/about">About</v-btn>
         </v-btn-toggle>
       </div>
-      <v-spacer></v-spacer>
-      <v-menu offset-y="">
+      <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
+      <v-menu offset-y="" v-if="$vuetify.breakpoint.mdAndUp">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
@@ -83,6 +82,19 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>About</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link to="/userProfile">
+          <v-list-item-icon>
+            <v-icon>mdi-account</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>User Profile</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link @click="signOut">
+          <v-list-item-content>
+            <v-list-item-title>Sign Out</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -158,6 +170,7 @@ html {
 }
 .v-btn.menu-button {
   padding-left: 0;
+  left: 0.5rem;
 }
 .nav-item {
   text-decoration: none;
