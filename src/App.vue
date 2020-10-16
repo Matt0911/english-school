@@ -12,7 +12,7 @@
       </v-btn>
       <div :class="{'d-flex': true, 'flex-grow-1':  $vuetify.breakpoint.smAndDown, 'align-center': $vuetify.breakpoint.smAndDown, 'justify-center': true}">
         <router-link to="/" :class="{'title-home': true, 'white--text': $vuetify.breakpoint.smAndDown, 'display-1': true}">
-          <v-img src="Title.jpg" max-width="250" :max-height="$vuetify.breakpoint.smAndDown ? '56' : '64'" />
+          <v-img :src="$vuetify.breakpoint.smAndDown ? 'white-title.png' : 'red-title.png'" max-width="250" :max-height="$vuetify.breakpoint.smAndDown ? '56' : '64'" />
         </router-link>
       </div>
       <div class="nav-button-container" v-if="$vuetify.breakpoint.mdAndUp">
@@ -84,7 +84,7 @@
             <v-list-item-title>About</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link to="/userProfile">
+        <v-list-item link v-if="$store.state.currentUser" to="/userProfile">
           <v-list-item-icon>
             <v-icon>mdi-account</v-icon>
           </v-list-item-icon>
@@ -92,9 +92,14 @@
             <v-list-item-title>User Profile</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link @click="signOut">
+        <v-list-item link v-if="$store.state.currentUser" @click="signOut">
           <v-list-item-content>
             <v-list-item-title>Sign Out</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link v-if="!$store.state.currentUser" to="/login">
+          <v-list-item-content>
+            <v-list-item-title>Sign In</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -122,8 +127,9 @@ export default {
         auth.signOut().then(() => {
           this.$store.commit('setCurrentUser', undefined);
           this.$store.commit('setUserProfile', undefined);
-          console.log(this.$router.currentRoute);
-          this.$router.push(this.$router.currentRoute);
+          if (this.$router.currentRoute.fullPath !== '/') {
+            this.$router.push('/');
+          }
         }).catch(function(error) {
           console.log(error);
           // An error happened.

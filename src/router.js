@@ -1,8 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import firebase from 'firebase';
-import Home from "./views/Home.vue";
-
 
 Vue.use(Router);
 
@@ -12,36 +10,32 @@ const router = new Router({
     {
       path: "/",
       name: "home",
-      component: Home
+      component: () => import(/* webpackChunkName: "home" */ "./views/Home.vue")
     },
     {
       path: "/about",
       name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
+      component: () => import(/* webpackChunkName: "about" */ "./views/About.vue")
     },
     {
       path: "/courses",
       name: "courses",
-      component: () => import("./views/Courses.vue")
+      component: () => import(/* webpackChunkName: "courses" */ "./views/Courses.vue")
     },
     {
       path: "/courses/:id",
       name: "course-details",
-      component: () => import("./views/CourseDetails.vue")
+      component: () => import(/* webpackChunkName: "course-details" */ "./views/CourseDetails.vue")
     },
     {
       path: "/login",
       name: "login",
-      component: () => import("./views/Login.vue")
+      component: () => import(/* webpackChunkName: "login" */ "./views/Login.vue")
     },
     {
       path: "/register",
       name: "registration",
-      component: () => import("./views/Registration.vue"),
+      component: () => import(/* webpackChunkName: "register" */ "./views/Registration.vue"),
       meta: {
         requiresAuth: true,
       }
@@ -49,7 +43,7 @@ const router = new Router({
     {
       path: "/userProfile",
       name: "userProfile",
-      component: Home,
+      component: () => import(/* webpackChunkName: "userProfile" */ "./views/Home.vue"),
       meta: {
         requiresAuth: true,
       }
@@ -62,11 +56,11 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.fullPath === from.fullPath) {
-    console.log('same path', to)
-    next(false);
-    return;
-  }
+  // if (to.fullPath === from.fullPath) {
+  //   console.log('same path', to)
+  //   next(false);
+  //   return;
+  // }
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
   const currentUser = firebase.auth().currentUser;
 
