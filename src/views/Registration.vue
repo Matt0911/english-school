@@ -15,14 +15,12 @@
 <script>
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators'
-import courses from "@/data/courses.js";
 export default {
   mixins: [validationMixin],
   name: "registration",
   data: () => ({
     firstName: '',
     lastName: '',
-    courseOptions: courses.map(c => c.name),
     selectedCourse: '',
     isSubmitting: false,
     showSuccess: false,
@@ -56,7 +54,7 @@ export default {
       }
     },
     fetchCourse: function(id) {
-      const course = courses.find(c => c.id == id);
+      const course =this.$store.state.courses.find(c => c.id == id);
       if (course) {
         this.selectedCourse = course.name;
       }
@@ -97,6 +95,9 @@ export default {
       !this.$v.selectedCourse.required && errors.push('You must select a course!')
       return errors
     },
+    courseOptions() {
+      return this.$store.state.courses.map(c => c.name);
+    }
   },
 };
 </script>
