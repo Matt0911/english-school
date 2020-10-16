@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import createPersistedState from "vuex-persistedstate";
 const fb = require('./firebaseConfig.js')
 
 Vue.use(Vuex)
@@ -25,5 +26,6 @@ export default new Vuex.Store({
       setUserProfile(state, val) {
         state.userProfile = val
       }
-    }
+    },
+    plugins: [createPersistedState()],
 })

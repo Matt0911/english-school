@@ -5,7 +5,7 @@
         <v-card v-if="formType === LOGIN_FORM_TYPE" :elevation="$vuetify.breakpoint.smAndDown ? 0 : 4"  :class="$vuetify.breakpoint.smAndDown ? '': 'login-card'">
           <h1>Welcome Back</h1>
             <v-text-field label="Email" v-model.trim="loginForm.email" :error-messages="emailErrors"  @input="$v.loginForm.email.$touch()" @blur="$v.loginForm.email.$touch()"></v-text-field>
-            <v-text-field label="Password" type="password" v-model.trim="loginForm.password" :error-messages="passwordErrors"  @input="$v.loginForm.password.$touch()" @blur="$v.loginForm.password.$touch()"></v-text-field>
+            <v-text-field label="Password" type="password" v-model.trim="loginForm.password" :error-messages="passwordErrors"  @input="$v.loginForm.password.$touch()" @blur="$v.loginForm.password.$touch()" @keydown.enter="login"></v-text-field>
           <v-btn @click="login" color="primary">Log In</v-btn>
 
           <div class="extras">
@@ -217,7 +217,11 @@ export default {
       auth.signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password).then(user => {
         this.$store.commit('setCurrentUser', user.user)
         this.$store.dispatch('fetchUserProfile')
-        this.$router.push('/userProfile')
+        if (this.$router.currentRoute.query.redirect) {
+          this.$router.push(this.$router.currentRoute.query.redirect);
+        } else {
+          this.$router.push('/')
+        }
       }).catch(err => {
         console.log(err)
         this.loginForm.password = '';

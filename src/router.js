@@ -62,11 +62,16 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  if (to.fullPath === from.fullPath) {
+    console.log('same path', to)
+    next(false);
+    return;
+  }
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
   const currentUser = firebase.auth().currentUser;
 
   if (requiresAuth && !currentUser) {
-      next('/login');
+      next({ name: 'login', query: { redirect: to.path}});
   } else if (requiresAuth && currentUser) {
       next();
   } else {
