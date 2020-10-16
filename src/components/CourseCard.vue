@@ -22,7 +22,7 @@
 export default {
   name: "CourseCard",
   props: {
-    id: Number,
+    id: String,
     name: String,
     description: String
   }

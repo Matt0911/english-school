@@ -10,12 +10,17 @@
 
 <script>
 import CourseCard from "@/components/CourseCard.vue";
-import courses from "@/data/courses.js";
+
 export default {
   name: "CourseList",
-  data: () => ({
-    courses,
-  }),
+  computed: {
+    courses() {
+      return this.$store.state.courses
+    }
+  },
+  created: function() {
+    this.$store.dispatch('fetchCourses')
+  },
   components: {
     CourseCard,
   }

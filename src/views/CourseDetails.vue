@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import courses from "@/data/courses.js";
 export default {
   name: "course-details",
   data: () => ({
@@ -16,7 +15,7 @@ export default {
   }),
   methods: {
     fetchCourse: function(id) {
-      const course = courses.find(c => c.id == id);
+      const course = this.$store.state.courses.find(c => c.id === id);
       if (course) {
         this.course = course;
       } else {

@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+      courses: [],
       currentUser: null,
       userProfile: {}
     },
@@ -17,9 +18,21 @@ export default new Vuex.Store({
         }).catch(err => {
           console.log(err)
         })
+      },
+      fetchCourses({ commit }) {
+        fb.coursesCollection.orderBy('order', 'asc').get().then(querySnapshot => {
+          const courses = []
+          querySnapshot.forEach(doc => {
+            courses.push({ id: doc.id, ...doc.data()})
+          })
+          commit('setCourses', courses)
+        })
       }
     }, 
     mutations: {
+      setCourses(state, val) {
+        state.courses = val
+      },
       setCurrentUser(state, val) {
         state.currentUser = val
       },

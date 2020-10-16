@@ -1,7 +1,7 @@
 <template>
   <v-carousel
     cycle
-    height="600"
+    :height="$vuetify.breakpoint.smAndDown ? '300' : '600'"
     hide-delimiter-background
     show-arrows-on-hover
   >

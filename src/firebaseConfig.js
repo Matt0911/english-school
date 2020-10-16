@@ -27,16 +27,16 @@ auth.onAuthStateChanged(user => {
 
 // firebase collections
 const usersCollection = db.collection('users');
-const postsCollection = db.collection('posts');
-const commentsCollection = db.collection('comments');
-const likesCollection = db.collection('likes');
+const coursesCollection = db.collection('courses');
+// const commentsCollection = db.collection('comments');
+// const likesCollection = db.collection('likes');
 
 export {
     db,
     auth,
     currentUser,
     usersCollection,
-    postsCollection,
-    commentsCollection,
-    likesCollection,
+    coursesCollection,
+    // commentsCollection,
+    // likesCollection,
 };
