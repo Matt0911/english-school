@@ -19,7 +19,7 @@
           <v-text-field label="Last Name" v-model.trim="signupForm.lastName" :error-messages="lastNameErrors"  @input="$v.signupForm.lastName.$touch()" @blur="$v.signupForm.lastName.$touch()"></v-text-field>
           <v-text-field label="Email" v-model.trim="signupForm.email" :error-messages="emailErrors"  @input="$v.signupForm.email.$touch()" @blur="$v.signupForm.email.$touch()"></v-text-field>
           <v-text-field label="Password" type="password" v-model.trim="signupForm.password" :error-messages="passwordErrors"  @input="$v.signupForm.password.$touch()" @blur="$v.signupForm.password.$touch()"></v-text-field>
-          <v-text-field label="Confirm Password" type="password" v-model.trim="signupForm.password2" :error-messages="password2Errors"  @input="$v.signupForm.password2.$touch()" @blur="$v.signupForm.password2.$touch()"></v-text-field>
+          <v-text-field label="Confirm Password" type="password" v-model.trim="signupForm.passwordConfirm" :error-messages="passwordConfirmErrors"  @input="$v.signupForm.passwordConfirm.$touch()" @blur="$v.signupForm.passwordConfirm.$touch()"></v-text-field>
           <v-btn @click="signup" color="primary">Sign Up</v-btn>
           <div class="extras">
             <a @click="toggleForm(LOGIN_FORM_TYPE)">Back to Log In</a>
@@ -67,7 +67,7 @@ export default {
         title: '',
         email: '',
         password: '',
-        password2: ''
+        passwordConfirm: ''
       },
       passwordReset: {
         email: '',
@@ -75,6 +75,7 @@ export default {
       formType: 'login',
       snackbar: false,
       snackbarMessage: '',
+      loginError: false,
     }
   },
   computed: {
@@ -121,6 +122,7 @@ export default {
         passwordField = this.$v.passwordReset.password;
       }
 
+      this.loginError && errors.push('Email/Password was not correct')
       if (!passwordField.$dirty) {
         return errors
       }
@@ -134,12 +136,12 @@ export default {
       }
       return errors
     },
-    password2Errors () {
+    passwordConfirmErrors () {
       const errors = []
-      const password2Field = this.$v.signupForm.password2;
-      if (!password2Field.$dirty) return errors
-      !password2Field.required && errors.push('Please confirm your password')
-      !password2Field.sameAsPassword && errors.push('Passwords do not match')
+      const passwordConfirmField = this.$v.signupForm.passwordConfirm;
+      if (!passwordConfirmField.$dirty) return errors
+      !passwordConfirmField.required && errors.push('Please confirm your password')
+      !passwordConfirmField.sameAsPassword && errors.push('Passwords do not match')
       return errors
     },
   },
@@ -187,7 +189,7 @@ export default {
               return /[#?!@$%^&*-]/.test(value)
             }
           },
-          password2: {
+          passwordConfirm: {
             required,
             sameAsPassword: sameAs('password')
           }
@@ -211,12 +213,15 @@ export default {
       this.formType = type;
     },
     login() {
+      this.loginError = false;
       auth.signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password).then(user => {
         this.$store.commit('setCurrentUser', user.user)
         this.$store.dispatch('fetchUserProfile')
         this.$router.push('/userProfile')
       }).catch(err => {
         console.log(err)
+        this.loginForm.password = '';
+        this.loginError = true;
       })
     },
     signup() {
