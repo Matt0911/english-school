@@ -32,11 +32,12 @@ const coursesCollection = db.collection('courses');
 // const likesCollection = db.collection('likes');
 
 export {
-    db,
-    auth,
-    currentUser,
-    usersCollection,
-    coursesCollection,
-    // commentsCollection,
-    // likesCollection,
+  firebase,
+  db,
+  auth,
+  currentUser,
+  usersCollection,
+  coursesCollection,
+  // commentsCollection,
+  // likesCollection,
 };

@@ -4,7 +4,7 @@
     <div class="pageContent">
       <v-text-field label="First Name" v-model="firstName" :error-messages="firstNameErrors" @input="$v.firstName.$touch()" @blur="$v.firstName.$touch()"></v-text-field>
       <v-text-field label="Last Name" v-model="lastName" :error-messages="lastNameErrors"  @input="$v.lastName.$touch()" @blur="$v.lastName.$touch()"></v-text-field>
-      <v-select :items="courseOptions" v-model="selectedCourse" label="Course"/>
+      <v-select :items="courseOptions" item-text="name" item-value="id" v-model="selectedCourse" label="Course"/>
       <v-btn color="primary" @click="submitRegistration" :loading="isSubmitting">Submit</v-btn>
     </div>
     <v-snackbar v-model="showSuccess" color="success">Submitted Successfully!</v-snackbar>
@@ -15,6 +15,8 @@
 <script>
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators'
+import { firebase, coursesCollection } from '../firebaseConfig.js';
+
 export default {
   mixins: [validationMixin],
   name: "registration",
@@ -30,27 +32,32 @@ export default {
     submitRegistration: function() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        const json = {
+        const registrationInfo = {
+          userUID: this.$store.state.currentUser.uid,
           firstName: this.firstName,
           lastName: this.lastName,
-          course: this.selectedCourse,
         }
-        console.log(json);
+        console.log(registrationInfo);
         this.isSubmitting = true
-        setTimeout(() => {
-          const success = this.isSubmitting
-          if (success) {
+        coursesCollection.doc(this.selectedCourse)
+          .update({
+            registrations:  firebase.firestore.FieldValue.arrayUnion(registrationInfo)
+          })
+          .then(() => {
             this.showSuccess = true;
             this.showFailure = false;
             this.$v.$reset()
             this.firstName = ''
             this.lastName = ''
-          } else {
+          })
+          .catch(err => {
             this.showFailure = true;
             this.showSuccess = false;
-          }
-          this.isSubmitting = false;
-        }, 1000)
+            console.error(err)
+          })
+          .finally(() => {
+            this.isSubmitting = false;
+          })
       }
     },
     fetchCourse: function(id) {
@@ -96,7 +103,7 @@ export default {
       return errors
     },
     courseOptions() {
-      return this.$store.state.courses.map(c => c.name);
+      return this.$store.state.courses;
     }
   },
 };
