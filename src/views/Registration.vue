@@ -37,7 +37,6 @@ export default {
           firstName: this.firstName,
           lastName: this.lastName,
         }
-        console.log(registrationInfo);
         this.isSubmitting = true
         coursesCollection.doc(this.selectedCourse)
           .update({
