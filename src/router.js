@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import firebase from 'firebase';
+import store from './store';
 
 Vue.use(Router);
 
@@ -38,6 +39,7 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "register" */ "./views/Registration.vue"),
       meta: {
         requiresAuth: true,
+        allowedRoles: ['student', 'teacher', 'admin']
       }
     },
     {
@@ -62,12 +64,14 @@ router.beforeEach((to, from, next) => {
   //   return;
   // }
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
-  const currentUser = firebase.auth().currentUser;
+  const { currentUser, userProfile } = store.state;
+  const adequateRole = to.matched.some(x => !x.meta.allowedRoles) || to.matched.some(x => x.meta.allowedRoles.some(r => userProfile.roles[`${r}Role`]))
+  console.log('ar', adequateRole);
 
   if (requiresAuth && !currentUser) {
       next({ name: 'login', query: { redirect: to.path}});
-  } else if (requiresAuth && currentUser) {
-      next();
+  } else if (requiresAuth && currentUser && !adequateRole) {
+        console.log('go to forbidden')
   } else {
       next();
   }

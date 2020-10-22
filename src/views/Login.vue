@@ -238,6 +238,10 @@ export default {
           usersCollection.doc(user.uid).set({
             firstName: this.signupForm.firstName,
             lastName: this.signupForm.lastName,
+            auth: {
+              // TODO: mechanism for signing up with other roles?
+              studentRole: true,
+            }
           }).then(() => {
             this.$store.dispatch('fetchUserProfile');
             this.$router.push('/userProfile');
