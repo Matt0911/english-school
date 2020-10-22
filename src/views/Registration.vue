@@ -15,7 +15,7 @@
 <script>
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators'
-import { firebase, coursesCollection } from '../firebaseConfig.js';
+import { firebase, registrationsCollection } from '../firebaseConfig.js';
 
 export default {
   mixins: [validationMixin],
@@ -38,9 +38,9 @@ export default {
           lastName: this.lastName,
         }
         this.isSubmitting = true
-        coursesCollection.doc(this.selectedCourse)
+        registrationsCollection.doc(this.selectedCourse)
           .update({
-            registrations:  firebase.firestore.FieldValue.arrayUnion(registrationInfo)
+            students:  firebase.firestore.FieldValue.arrayUnion(registrationInfo)
           })
           .then(() => {
             this.showSuccess = true;
@@ -62,7 +62,7 @@ export default {
     fetchCourse: function(id) {
       const course =this.$store.state.courses.find(c => c.id == id);
       if (course) {
-        this.selectedCourse = course.name;
+        this.selectedCourse = course.id;
       }
     }
   },

@@ -216,12 +216,13 @@ export default {
       this.loginError = false;
       auth.signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password).then(user => {
         this.$store.commit('setCurrentUser', user.user)
-        this.$store.dispatch('fetchUserProfile')
-        if (this.$router.currentRoute.query.redirect) {
-          this.$router.push(this.$router.currentRoute.query.redirect);
-        } else {
-          this.$router.push('/')
-        }
+        this.$store.dispatch('fetchUserProfile').then(() => {
+          if (this.$router.currentRoute.query.redirect) {
+            this.$router.push(this.$router.currentRoute.query.redirect);
+          } else {
+            this.$router.push('/')
+          }
+        })
       }).catch(err => {
         console.log(err)
         this.loginForm.password = '';
@@ -234,18 +235,17 @@ export default {
           this.$store.commit('setCurrentUser', user.user);
           resolve(user.user);
         }))
-        .then(user => {
-          usersCollection.doc(user.uid).set({
+        .then(async user => {
+          await usersCollection.doc(user.uid).set({
             firstName: this.signupForm.firstName,
             lastName: this.signupForm.lastName,
-            auth: {
+            roles: {
               // TODO: mechanism for signing up with other roles?
               studentRole: true,
             }
-          }).then(() => {
-            this.$store.dispatch('fetchUserProfile');
-            this.$router.push('/userProfile');
           })
+          await this.$store.dispatch('fetchUserProfile')
+          this.$router.push('/userProfile');
         })
         .catch(err => {
           console.log(err)

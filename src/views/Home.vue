@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <MainCarousel />
-    <img alt="Vue logo" src="../assets/logo.png" />
   </div>
 </template>
 

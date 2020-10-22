@@ -18,6 +18,7 @@
       <div class="nav-button-container" v-if="$vuetify.breakpoint.mdAndUp">
         <v-btn-toggle group>
           <v-btn text to="/courses">Courses</v-btn>
+          <v-btn text to="/teacherCenter">Teacher Center</v-btn>
           <v-btn text to="/register">Register</v-btn>
           <v-btn text to="/about">About</v-btn>
         </v-btn-toggle>
@@ -68,6 +69,14 @@
             <v-list-item-title>Courses</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link to="/teacherCenter">
+          <v-list-item-icon>
+            <v-icon>mdi-food-apple</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Teacher Center</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item link to="/register">
           <v-list-item-icon>
             <v-icon>mdi-book-plus</v-icon>
@@ -111,7 +120,8 @@
 </template>
 
 <script>
-import { auth } from './firebaseConfig.js';
+import { auth } from './firebaseConfig';
+import { shouldUserHaveAccess } from './utils';
 
 export default {
   name: 'App',
@@ -136,6 +146,7 @@ export default {
         });
       }
     },
+    shouldUserHaveAccess,
   }
 };
 </script>

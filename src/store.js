@@ -13,25 +13,49 @@ export default new Vuex.Store({
     },
     actions: {
       fetchUserProfile({ commit, state }) {
-        fb.usersCollection.doc(state.currentUser.uid).get().then(res => {
-          commit('setUserProfile', res.data())
-        }).catch(err => {
-          console.log(err)
+        return new Promise((resolve, reject) => {
+          fb.usersCollection.doc(state.currentUser.uid).get().then(res => {
+            commit('setUserProfile', res.data())
+            resolve();
+          }).catch(err => {
+            console.error(err)
+            reject();
+          })
         })
       },
       fetchCourses({ commit }) {
-        fb.coursesCollection.orderBy('order', 'asc').get().then(querySnapshot => {
-          const courses = []
-          querySnapshot.forEach(doc => {
-            courses.push({ id: doc.id, ...doc.data()})
+        return new Promise((resolve, reject) => {
+          fb.coursesCollection.orderBy('order', 'asc').get().then(querySnapshot => {
+            const courses = []
+            querySnapshot.forEach(doc => {
+              courses.push({ id: doc.id, ...doc.data()})
+            })
+            commit('setCourses', courses)
+            resolve()
+          }).catch(err => {
+            console.error(err)
+            reject()
           })
-          commit('setCourses', courses)
         })
-      }
+      },
+      saveCourse({ commit }, { id, course }) {
+        return new Promise((resolve, reject) => {
+          fb.coursesCollection.doc(id).set(course).then(() => {
+            commit('saveCourse', { id, course })
+            resolve()
+          }).catch(err => {
+            console.error(err)
+            reject()
+          })
+        })
+      },
     }, 
     mutations: {
-      setCourses(state, val) {
-        state.courses = val
+      setCourses(state, courses) {
+        state.courses = courses
+      },
+      saveCourse(state, { id, course }) {
+        state.courses = state.courses.map(c => c.id === id ? {...course, id} : c)
       },
       setCurrentUser(state, val) {
         state.currentUser = val

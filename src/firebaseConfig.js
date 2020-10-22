@@ -28,6 +28,7 @@ auth.onAuthStateChanged(user => {
 // firebase collections
 const usersCollection = db.collection('users');
 const coursesCollection = db.collection('courses');
+const registrationsCollection = db.collection('registrations');
 // const commentsCollection = db.collection('comments');
 // const likesCollection = db.collection('likes');
 
@@ -38,6 +39,7 @@ export {
   currentUser,
   usersCollection,
   coursesCollection,
+  registrationsCollection,
   // commentsCollection,
   // likesCollection,
 };
