@@ -2,24 +2,25 @@
   <v-dialog
     ref="dialog"
     v-model="modal"
-    :return-value.sync="date"
+    :return-value.sync="time"
     persistent
     width="290px"
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        v-bind:value="date | formatDate"
-        :label="label"
-        prepend-icon="mdi-calendar"
+        v-bind:value="time"
+        label="Picker in dialog"
+        prepend-icon="mdi-clock-time-four-outline"
         readonly
         v-bind="attrs"
         v-on="on"
       ></v-text-field>
     </template>
-    <v-date-picker
-      v-bind:value="date"
-      v-on:input="$emit('date-changed', $event)"
-      scrollable
+    <v-time-picker
+      v-if="modal"
+      v-bind:value="time"
+      v-on:input="$emit('time-changed', $event)"
+      full-width
     >
       <v-spacer></v-spacer>
       <v-btn
@@ -32,19 +33,19 @@
       <v-btn
         text
         color="primary"
-        @click="$refs.dialog.save(date)"
+        @click="$refs.dialog.save(time)"
       >
         OK
       </v-btn>
-    </v-date-picker>
+    </v-time-picker>
   </v-dialog>
 </template>
 
 <script>
 export default {
-  name: "DatePickerModal",
+  name: "TimePickerModal",
   props: {
-    date: String,
+    time: String,
     label: String,
   },
   data() {

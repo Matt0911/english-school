@@ -6,13 +6,15 @@
           <v-card-title v-if="!isEditing">
             <div class="headline">{{course.name}}</div>
             <div class="course-times">{{`${course.startTime} - ${course.endTime}`}}</div>
-            <div class="course-dates">{{`${course.startDate} - ${course.endDate}`}}</div>
+            <div class="course-dates"><span>{{course.startDate | formatDate}}</span>-<span>{{course.endDate | formatDate}}</span></div>
           </v-card-title>
           <v-card-title v-else>
             <v-text-field label="CourseName" v-model.trim="name"></v-text-field>
             <div class="course-dates">{{`${startDate} - ${endDate}`}}</div>
-            <v-date-picker v-model="startDate"></v-date-picker>
-            <v-date-picker v-model="endDate"></v-date-picker>
+            <TimePickerModal :time="startTime" label="Start Time" v-on:time-changed="startTime = $event"></TimePickerModal>
+            <TimePickerModal :time="endTime" label="End Time" v-on:time-changed="endTime = $event"></TimePickerModal>
+            <DatePickerModal :date="startDate" label="Start Date" v-on:date-changed="startDate = $event"></DatePickerModal>
+            <DatePickerModal :date="endDate" label="End Date" v-on:date-changed="endDate = $event"></DatePickerModal>
           </v-card-title>
           <v-card-text>{{course.description}}</v-card-text>
           <v-card-actions>
@@ -28,6 +30,8 @@
 </template>
 
 <script>
+import DatePickerModal from '@/components/DatePickerModal.vue';
+import TimePickerModal from '@/components/TimePickerModal.vue';
 import { shouldUserHaveAccess } from '../utils';
 export default {
   name: "CourseCard",
@@ -63,16 +67,25 @@ export default {
       })
       this.isEditing = false;
     },
+  },
+  components: {
+    DatePickerModal,
+    TimePickerModal,
   }
 };
 </script>
 
 <style lang="scss" scoped>
   .course-card {
-    display: inline-block;
-    margin: 10px;
-    height: 90%;
-    width: 90%;
+    margin: 0.5rem;
+    height: calc(100% - 1rem);
+
+    .container {
+      height: 100%;
+      .layout {
+        height: 100%;
+      }
+    }
 
     .v-card__title {
       flex-direction: column;
