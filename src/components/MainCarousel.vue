@@ -1,26 +1,15 @@
 <template>
   <v-carousel
     cycle
-    :height="$vuetify.breakpoint.smAndDown ? '300' : '600'"
+    :height="$vuetify.breakpoint.smAndDown ? '400' : '700'"
     hide-delimiter-background
     show-arrows-on-hover
   >
     <v-carousel-item
-      v-for="(slide, i) in slides"
+      v-for="(img, i) in images"
       :key="i"
+      :src="img"
     >
-      <v-sheet
-        :color="colors[i]"
-        height="100%"
-      >
-        <v-row
-          class="fill-height"
-          align="center"
-          justify="center"
-        >
-          <v-btn text class="display-3" :to="i % 2 ? '/about' : '/courses'">{{ slide }}</v-btn>
-        </v-row>
-      </v-sheet>
     </v-carousel-item>
   </v-carousel>
 </template>
@@ -30,8 +19,7 @@ export default {
   name: "MainCarousel",
   data () {
     return {
-      slides: ['Cool pic to show something', 'A different pic', 'Maybe something else?', 'People having fun learning', 'SMILES! :)'],
-      colors: ['orange', 'blue', 'grey', 'purple', 'green'],
+      images: ['students.jpg', 'teacher.jpg', 'fun.jpg', 'convo.jpg'],
     }
   },
 };
